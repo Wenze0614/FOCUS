@@ -1,38 +1,56 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+}
+
+.timer-controls {
+  display: flex;
+  justify-content: space-between;
+  width: 30vw;
+}
+
+.timerButton {
+  font-size: 3rem;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: rgb(95, 95, 95);
+  font-family: "Tilt Prism", cursive;
+  transition: color 0.5s ease-in-out;
+  cursor: pointer;
+}
+
+.timerButton.active {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.timer-input {
+  font-size: 1rem;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  max-width: 70vw;
+  text-align: center;
+  border-bottom: gray solid 1px;
+  color:gray;
+  transition: all 0.5s ease-in-out;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.timer-input:focus {
+  color: white;
+  font-size: 3rem;
+}
+
+.timer-input::placeholder{
+  color: grey;
+  transition: color 0.5s ease;
+}
+
+.timer-input:focus::placeholder{
+  color: transparent;
 }
