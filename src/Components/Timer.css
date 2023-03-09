@@ -5,4 +5,9 @@
   margin:0;
   margin-bottom: 160px;
   max-width: 70vw;
+  transition: color 0.5s ease-in-out
+}
+
+.timer.paused{
+    color: rgb(95, 95, 95);
 }

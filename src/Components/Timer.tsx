@@ -23,12 +23,15 @@ function formatTime(seconds: number): string {
 
 export const Timer = ({ timerStatus, countDown }: Props) => {
   useEffect(() => {
-    if(timerStatus.initialTime===0 && timerStatus.status==="active"){
+    if (timerStatus.initialTime === 0 && timerStatus.status === "active") {
       alert("Focus Time Completed!!!");
       return;
     }
     const interval = setInterval(
-      () => timerStatus.status === "active" && timerStatus.initialTime > 0 && countDown(),
+      () =>
+        timerStatus.status === "active" &&
+        timerStatus.initialTime > 0 &&
+        countDown(),
       1000
     );
 
@@ -37,5 +40,9 @@ export const Timer = ({ timerStatus, countDown }: Props) => {
     };
   }, [timerStatus, countDown]);
 
-  return <p className="timer">{formatTime(timerStatus.initialTime)}</p>;
+  return (
+    <p className={`timer ${timerStatus.status === "paused" ? "paused" : ""}`}>
+      {formatTime(timerStatus.initialTime)}
+    </p>
+  );
 };

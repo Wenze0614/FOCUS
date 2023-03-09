@@ -41,6 +41,11 @@ function App() {
   const [inputTime, setInputTime] = useState("")
 
   const handleInputTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(timerStatus.status==="active"){
+      setTimerStatus(t => {
+        return {...t, status:"paused"}
+      })
+    }
     setInputTime(e.target.value);
     setTimerStatus(t => {
       return {...t, initialTime: timeToSeconds(e.target.value) || 0}
@@ -56,10 +61,10 @@ function App() {
   useEffect(() => {
     if(timerStatus.initialTime === 0){
       setTimerStatus(t => {
-        return {...t, status:"paused"}
+        return {status:"paused", initialTime:timeToSeconds(inputTime) || 0}
       })
     }
-  },[timerStatus.initialTime])
+  },[timerStatus.initialTime, inputTime])
 
   return (
     <div className="App">
