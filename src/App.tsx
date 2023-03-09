@@ -3,9 +3,9 @@ import "./App.css";
 import { Timer } from "./Components/Timer";
 
 export interface TimerStatus {
-  status:"active"|"paused",
-  initialTime:number
-};
+  status: "active" | "paused";
+  initialTime: number;
+}
 
 function timeToSeconds(time: string) {
   let seconds = 0;
@@ -37,53 +37,74 @@ function timeToSeconds(time: string) {
 }
 
 function App() {
-  const [timerStatus, setTimerStatus] = useState<TimerStatus>({status:"paused", initialTime:0});
-  const [inputTime, setInputTime] = useState("")
+  const [timerStatus, setTimerStatus] = useState<TimerStatus>({
+    status: "paused",
+    initialTime: 0,
+  });
+  const [inputTime, setInputTime] = useState("");
 
   const handleInputTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(timerStatus.status==="active"){
-      setTimerStatus(t => {
-        return {...t, status:"paused"}
-      })
+    const seconds = timeToSeconds(e.target.value);
+
+    if (timerStatus.status === "active") {
+      setTimerStatus((t) => {
+        return { ...t, status: "paused" };
+      });
     }
-    setInputTime(e.target.value);
-    setTimerStatus(t => {
-      return {...t, initialTime: timeToSeconds(e.target.value) || 0}
-    })
-  }
+
+    if (seconds || timerStatus.status === "paused") {
+      setInputTime(e.target.value);
+      setTimerStatus((t) => {
+        return { ...t, initialTime: seconds || 0 };
+      });
+    }
+  };
 
   const countDown = () => {
     setTimerStatus((t) => {
-      return {...t, initialTime:t.initialTime-1}
-    })
-  }
+      return { ...t, initialTime: t.initialTime - 1 };
+    });
+  };
 
   useEffect(() => {
-    if(timerStatus.initialTime === 0){
-      setTimerStatus(t => {
-        return {status:"paused", initialTime:timeToSeconds(inputTime) || 0}
-      })
+    if (timerStatus.initialTime === 0) {
+      setTimerStatus((t) => {
+        return { status: "paused", initialTime: timeToSeconds(inputTime) || 0 };
+      });
     }
-  },[timerStatus.initialTime, inputTime])
+  }, [timerStatus.initialTime, inputTime]);
 
   return (
     <div className="App">
-      <input value={inputTime} className="timer-input" placeholder="type your focus time" onChange={handleInputTime}></input>
+      <input
+        value={inputTime}
+        className="timer-input"
+        placeholder="type your focus time"
+        onChange={handleInputTime}
+      ></input>
       <Timer timerStatus={timerStatus} countDown={countDown}></Timer>
       <div className="timer-controls">
         <button
-          className={`timerButton ${timerStatus.status === "paused" ? "active" : ""}`}
-          onClick={() => setTimerStatus((t) => {
-            return {...t, status:"active"}
-          })}
+          className={`timerButton ${
+            timerStatus.status === "paused" ? "active" : ""
+          }`}
+          onClick={() =>
+            setTimerStatus((t) => {
+              return { ...t, status: "active" };
+            })
+          }
         >
           Start
         </button>
         <button
-          className={`timerButton ${timerStatus.status === "active" ? "active" : ""}`}
-          onClick={() => setTimerStatus((t) => {
-            return {...t, status:"paused"}
-          })}
+          className={`timerButton ${
+            timerStatus.status === "active" ? "active" : ""
+          }`}
+          onClick={() =>
+            setTimerStatus((t) => {
+              return { ...t, status: "paused" };
+            })
+          }
         >
           Pause
         </button>
