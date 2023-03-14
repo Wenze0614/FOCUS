@@ -1,6 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  KeyboardEvent,
+  useRef,
+} from "react";
 import "./App.css";
+import TaskBar from "./Components/TaskBar";
 import { Timer } from "./Components/Timer";
+import { appBasicContext } from "./Context/AppBasicContext";
+import { TaskContext } from "./Context/TaskContext";
 
 export interface TimerStatus {
   status: "active" | "paused";
@@ -41,7 +50,11 @@ function App() {
     status: "paused",
     initialTime: 0,
   });
+
+  const { currentTask, setCurrentTask } = useContext(TaskContext);
+  const { setAppBasicStates} = useContext(appBasicContext)
   const [inputTime, setInputTime] = useState("");
+  const appRef = useRef<HTMLDivElement>(null);
 
   const handleInputTime = (e: React.ChangeEvent<HTMLInputElement>) => {
     const seconds = timeToSeconds(e.target.value);
@@ -60,10 +73,33 @@ function App() {
     }
   };
 
+  
+  const handleEditTask = () => {
+    setCurrentTask(t => ({...t, isEditing:true}))
+  };
+
+  const handleKeyEvent = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" && !currentTask.isEditing) {
+      setTimerStatus((t) => {
+        return { ...t, status: t.status === "paused" ? "active" : "paused" };
+      });
+    }
+
+    if(e.key === 'e' && !currentTask.isEditing){
+      setCurrentTask(t => ({...t, isEditing: !t.isEditing}))
+      setAppBasicStates(a => ({...a, shortCuts:{key_e_pressed:true} }))
+    }
+  };
+
   const countDown = () => {
     setTimerStatus((t) => {
       return { ...t, initialTime: t.initialTime - 1 };
     });
+    if (currentTask.status === "onGoing") {
+      setCurrentTask((t) => {
+        return { ...t, timeSpent: t.timeSpent + 1 };
+      });
+    }
   };
 
   useEffect(() => {
@@ -74,8 +110,25 @@ function App() {
     }
   }, [timerStatus.initialTime, inputTime]);
 
+  useEffect(() => {
+    if (appRef.current && !currentTask.isEditing) {
+      appRef.current.focus();
+    }
+  }, [currentTask.isEditing]);
+
+  useEffect(() => {
+    if (appRef.current) {
+      appRef.current.focus();
+    }
+  }, []);
+
   return (
-    <div className="App">
+    <div
+      className="App"
+      onKeyDown={handleKeyEvent}
+      tabIndex={0}
+      ref={appRef}
+    >
       <input
         value={inputTime}
         className="timer-input"
@@ -83,6 +136,7 @@ function App() {
         onChange={handleInputTime}
       ></input>
       <Timer timerStatus={timerStatus} countDown={countDown}></Timer>
+      <TaskBar handleEditTask={handleEditTask}></TaskBar>
       <div className="timer-controls">
         <button
           className={`timerButton ${

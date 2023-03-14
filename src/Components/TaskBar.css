@@ -1,0 +1,70 @@
+.task-bar {
+    margin-bottom: 160px;
+}
+
+.add-task-button{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    color:rgb(95, 95, 95);
+    transition: color 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+.add-task-button:hover{
+    color:white;
+}
+
+.add-task-input{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    border-bottom: 1px white solid;
+}
+
+.task-attribute{
+    color:rgb(95, 95, 95);
+    font-family: 'Poppins', sans-serif;
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+.task-area{
+    display: flex;
+    flex-direction: row;
+}
+
+.task-complete-button{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color:rgb(95, 95, 95);
+    transition: color 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.task-complete-button:hover{
+    color:white;
+}
+
+.task-edit-button{
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.task-edit-button.material-symbols-outlined{
+    background-color: transparent;
+    color:rgb(95, 95, 95);
+    outline: none;
+    border: none;
+    font-size: 1rem;
+}
+
+.task-edit-button:hover{
+    color:white;
+}
