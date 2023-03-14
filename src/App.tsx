@@ -79,7 +79,8 @@ function App() {
   };
 
   const handleKeyEvent = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter" && !currentTask.isEditing) {
+    console.log("key event?")
+    if (e.key === "Enter" && !currentTask.isEditing && timerStatus.initialTime) {
       setTimerStatus((t) => {
         return { ...t, status: t.status === "paused" ? "active" : "paused" };
       });
@@ -114,7 +115,7 @@ function App() {
     if (appRef.current && !currentTask.isEditing) {
       appRef.current.focus();
     }
-  }, [currentTask.isEditing]);
+  }, [currentTask]);
 
   useEffect(() => {
     if (appRef.current) {

@@ -1,6 +1,6 @@
 import { KeyboardEvent, useRef, useEffect, useContext } from "react";
 import "./TaskBar.css";
-import { TaskContext } from "../Context/TaskContext";
+import { CompletedTasksContext, defaultTask, TaskContext } from "../Context/TaskContext";
 import { formatTime } from "./Timer";
 import { appBasicContext } from "../Context/AppBasicContext";
 
@@ -11,21 +11,30 @@ interface Props {
 export default function TaskBar({ handleEditTask }: Props) {
   //   const [currentTask, setCurrentTask] = useState<TaskOnFocus>(defaultTask);
   const { currentTask, setCurrentTask } = useContext(TaskContext);
+  const { completedTasks, setCompletedTasks} = useContext(CompletedTasksContext)
   const { appBasicStates, setAppBasicStates } = useContext(appBasicContext);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleAddTask = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      setCurrentTask((t) => {
-        return { ...t, isEditing: false, status: "onGoing" };
-      });
-      if (inputRef.current) inputRef.current.blur();
+      if (currentTask.name) {
+        setCurrentTask((t) => {
+          return { ...t, isEditing: false, status: "onGoing" };
+        });
+      }
+      if (inputRef.current) {
+        inputRef.current.blur();
+        setCurrentTask((t) => {
+          return { ...t, isEditing: false };
+        });
+      }
     }
   };
 
-  // const handleEditTask = () => {
-  //   setCurrentTask(t => ({...t, isEditing:true}))
-  // };
+  const handleTaskComplete = () => {
+    setCompletedTasks(tasks => ({...tasks, currentTask}))
+    setCurrentTask(defaultTask)
+  }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (appBasicStates.shortCuts.key_e_pressed) {
@@ -59,7 +68,7 @@ export default function TaskBar({ handleEditTask }: Props) {
         <div className="task-area">
           <p className="task-attribute">{currentTask.name}</p>
           <p className="task-attribute">{formatTime(currentTask.timeSpent)}</p>
-          <button className="task-complete-button">&#x2713;</button>
+          <button className="task-complete-button" onClick={handleTaskComplete}>&#x2713;</button>
           <button
             className="task-edit-button material-symbols-outlined"
             onClick={handleEditTask}
