@@ -46,6 +46,22 @@ export default function TaskBar({ handleEditTask }: Props) {
     });
   };
 
+  const newEntry = {
+    "Project Name": "project 1",
+    "Project Code": "P0166",
+    "Spend Time": 3
+  }
+
+  const handleAddToNotion = () => {
+    fetch('http://localhost:3001/addNewEntry', {
+      method:"POST",
+      headers: {
+        'Content-Type': "application/json"
+      },
+      body:JSON.stringify(newEntry)
+    }).catch(error => console.error(error))
+  }
+
   useEffect(() => {
     if (inputRef.current && currentTask.isEditing) {
       console.log("focusing to input");
@@ -75,6 +91,7 @@ export default function TaskBar({ handleEditTask }: Props) {
           >
             edit
           </button>
+          {/* <button onClick={handleAddToNotion}>add to notion</button> */}
         </div>
       ) : (
         <button

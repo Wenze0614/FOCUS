@@ -56,3 +56,16 @@
 .timer-input:focus::placeholder{
   color: transparent;
 }
+
+.extra-tools{
+  position: absolute;
+  right: 6rem;
+  top:3rem;
+}
+
+.extra-tools button{
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}

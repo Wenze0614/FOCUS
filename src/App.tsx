@@ -10,6 +10,8 @@ import TaskBar from "./Components/TaskBar";
 import { Timer } from "./Components/Timer";
 import { appBasicContext } from "./Context/AppBasicContext";
 import { TaskContext } from "./Context/TaskContext";
+import HotelIcon from '@mui/icons-material/Hotel';
+import SleepSchedule from "./Components/SleepSchedule";
 
 export interface TimerStatus {
   status: "active" | "paused";
@@ -52,8 +54,9 @@ function App() {
   });
 
   const { currentTask, setCurrentTask } = useContext(TaskContext);
-  const { setAppBasicStates} = useContext(appBasicContext)
+  const { setAppBasicStates } = useContext(appBasicContext);
   const [inputTime, setInputTime] = useState("");
+  const [sleepSchedule, setSleepSchedule] = useState(false)
   const appRef = useRef<HTMLDivElement>(null);
 
   const handleInputTime = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,24 +76,28 @@ function App() {
     }
   };
 
-  
   const handleEditTask = () => {
-    setCurrentTask(t => ({...t, isEditing:true}))
+    setCurrentTask((t) => ({ ...t, isEditing: true }));
   };
 
   const handleKeyEvent = (e: KeyboardEvent<HTMLDivElement>) => {
-    console.log("key event?")
-    if (e.key === "Enter" && !currentTask.isEditing && timerStatus.initialTime) {
+    console.log("key event?");
+    if (
+      e.key === "Enter" &&
+      !currentTask.isEditing &&
+      timerStatus.initialTime
+    ) {
       setTimerStatus((t) => {
         return { ...t, status: t.status === "paused" ? "active" : "paused" };
       });
     }
 
-    if(e.key === 'e' && !currentTask.isEditing){
-      setCurrentTask(t => ({...t, isEditing: !t.isEditing}))
-      setAppBasicStates(a => ({...a, shortCuts:{key_e_pressed:true} }))
+    if (e.key === "e" && !currentTask.isEditing) {
+      setCurrentTask((t) => ({ ...t, isEditing: !t.isEditing }));
+      setAppBasicStates((a) => ({ ...a, shortCuts: { key_e_pressed: true } }));
     }
   };
+
 
   const countDown = () => {
     setTimerStatus((t) => {
@@ -124,47 +131,45 @@ function App() {
   }, []);
 
   return (
-    <div
-      className="App"
-      onKeyDown={handleKeyEvent}
-      tabIndex={0}
-      ref={appRef}
-    >
-      <input
-        value={inputTime}
-        className="timer-input"
-        placeholder="type your focus time"
-        onChange={handleInputTime}
-      ></input>
-      <Timer timerStatus={timerStatus} countDown={countDown}></Timer>
-      <TaskBar handleEditTask={handleEditTask}></TaskBar>
-      <div className="timer-controls">
-        <button
-          className={`timerButton ${
-            timerStatus.status === "paused" ? "active" : ""
-          }`}
-          onClick={() =>
-            setTimerStatus((t) => {
-              return { ...t, status: "active" };
-            })
-          }
-        >
-          Start
-        </button>
-        <button
-          className={`timerButton ${
-            timerStatus.status === "active" ? "active" : ""
-          }`}
-          onClick={() =>
-            setTimerStatus((t) => {
-              return { ...t, status: "paused" };
-            })
-          }
-        >
-          Pause
-        </button>
+    <>
+      <div className="extra-tools"><button onClick={() => {setSleepSchedule(s  => !s)}}><HotelIcon htmlColor="white"></HotelIcon></button></div>
+      <div className="App" onKeyDown={handleKeyEvent} tabIndex={0} ref={appRef}>
+        <input
+          value={inputTime}
+          className="timer-input"
+          placeholder="type your focus time"
+          onChange={handleInputTime}
+        ></input>
+        {sleepSchedule ? <SleepSchedule seconds={timeToSeconds(inputTime)||0}></SleepSchedule> : <Timer timerStatus={timerStatus} countDown={countDown}></Timer>}
+        <TaskBar handleEditTask={handleEditTask}></TaskBar>
+        <div className="timer-controls">
+          <button
+            className={`timerButton ${
+              timerStatus.status === "paused" ? "active" : ""
+            }`}
+            onClick={() =>
+              setTimerStatus((t) => {
+                return { ...t, status: "active" };
+              })
+            }
+          >
+            Start
+          </button>
+          <button
+            className={`timerButton ${
+              timerStatus.status === "active" ? "active" : ""
+            }`}
+            onClick={() =>
+              setTimerStatus((t) => {
+                return { ...t, status: "paused" };
+              })
+            }
+          >
+            Pause
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

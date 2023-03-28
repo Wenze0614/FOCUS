@@ -1,6 +1,7 @@
 // @flow
 import { useEffect, useMemo } from "react";
 import { TimerStatus } from "../App";
+import TimeDisplay from "./TimeDisplay";
 import "./Timer.css";
 
 type Props = {
@@ -50,8 +51,6 @@ export const Timer = ({ timerStatus, countDown }: Props) => {
   }
 
   return (
-    <p className={`timer ${timerStatus.status === "paused" ? "paused" : ""}`}>
-      {formatTime(timerStatus.initialTime)}
-    </p>
+    <TimeDisplay status={timerStatus.status} time={timerStatus.initialTime}></TimeDisplay>
   );
 };
